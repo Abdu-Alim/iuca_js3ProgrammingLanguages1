@@ -83,3 +83,19 @@ tabsItemsParents.onclick = (event) => {
         })
     }
 }
+
+const russianPhoneInput = document.querySelector('#russian_phone_input');
+const russianPhoneButton = document.querySelector('#russian_phone_button');
+const russianPhoneResult = document.querySelector('#russian_phone_result');
+
+const russianPhoneRegExp = /^(\+7|8)\s?\d{3}\s?\d{3}-?\d{2}-?\d{2}$/;
+
+russianPhoneButton.addEventListener('click', () => {
+    if (russianPhoneRegExp.test(russianPhoneInput.value.trim())) {
+        russianPhoneResult.innerHTML = 'Номер верный';
+        russianPhoneResult.style.color = 'green';
+    } else {
+        russianPhoneResult.innerHTML = 'Номер неверный';
+        russianPhoneResult.style.color = 'red';
+    }
+});
