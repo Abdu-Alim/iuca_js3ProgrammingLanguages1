@@ -84,23 +84,21 @@ tabsItemsParents.onclick = (event) => {
     }
 }
 
-
+// Получаем input элементы
 const somInput = document.querySelector('#som');
 const usdInput = document.querySelector('#usd');
 const eurInput = document.querySelector('#eur');
 
 const converter = (element, target1, target2, currentType) => {
-    element.oninput = async () => {
+    element.addEventListener('input', async () => {
         try {
             const response = await fetch('../data/converter.json');
-            if (!response.ok) {
-                throw new Error('Error');
-            }
-            const data = await response.json();
+            if (!response.ok) throw new Error('Не удалось загрузить данные');
 
-            const value = element.value;
-            
-            if (value === '') {
+            const data = await response.json();
+            const value = parseFloat(element.value);
+
+            if (!element.value || isNaN(value)) {
                 target1.value = '';
                 target2.value = '';
                 return;
@@ -108,25 +106,24 @@ const converter = (element, target1, target2, currentType) => {
 
             switch(currentType) {
                 case 'som':
-                    target1.value = (value / data.usd).toFixed(2); // USD
-                    target2.value = (value / data.eur).toFixed(2); // EUR
+                    target1.value = (value / data.usd).toFixed(2);
+                    target2.value = (value / data.eur).toFixed(2);
                     break;
                 case 'usd':
-                    target1.value = (value * data.usd).toFixed(2); // SOM
-                    target2.value = ((value * data.usd) / data.eur).toFixed(2); // EUR
+                    target1.value = (value * data.usd).toFixed(2);
+                    target2.value = ((value * data.usd) / data.eur).toFixed(2);
                     break;
                 case 'eur':
-                    target1.value = (value * data.eur).toFixed(2); // SOM
-                    target2.value = ((value * data.eur) / data.usd).toFixed(2); // USD
+                    target1.value = (value * data.eur).toFixed(2);
+                    target2.value = ((value * data.eur) / data.usd).toFixed(2);
                     break;
             }
         } catch (error) {
-            console.error('Error', error);
+            console.error(error);
         }
-    }
-}
+    });
+};
 
-// Инициализация конвертера для всех полей
 converter(somInput, usdInput, eurInput, 'som');
 converter(usdInput, somInput, eurInput, 'usd');
 converter(eurInput, somInput, usdInput, 'eur');
