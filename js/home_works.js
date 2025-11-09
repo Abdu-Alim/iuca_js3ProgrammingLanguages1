@@ -16,6 +16,22 @@ button.addEventListener('click', ()=>{
     }
 });
 
+const iinInput = document.querySelector('#iin_input');
+const iinButton = document.querySelector('#iin_button');
+const iinResult = document.querySelector('#iin_result');
+
+const iinRegExp = /^\d{12}$/;
+
+iinButton.addEventListener('click', () => {
+    if (iinRegExp.test(iinInput.value.trim())) {
+        iinResult.innerHTML = 'ИИН верный';
+        iinResult.style.color = 'green';
+    } else {
+        iinResult.innerHTML = 'ИИН неверный';
+        iinResult.style.color = 'red';
+    }
+});
+
 
 //движение квадрата по квадрату
 const parentBlock = document.querySelector('.parent_block')
